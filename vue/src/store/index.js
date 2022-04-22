@@ -1,4 +1,114 @@
 import { createStore } from "vuex";
+import axiosClient from "../axios";
+
+const tmpSurveys = [
+  {
+    id: 100,
+    title: "teste_title",
+    slug: "test_sluig",
+    status: "test_status",
+    image: "C:/Users/joao_/OneDrive/Imagens/1.jpeg",
+    description: "test_description",
+    created_at: "test_created_at",
+    upadated_at: "test_updated_at",
+    expire_date: "test_expire_date",
+    questions: [
+      {
+        id: 1,
+        type: "select",
+        questions: "From witch country are you?",
+        description: null,
+        data: {
+          options: [
+            { uuid: "9663f23c-c271-11ec-9d64-0242ac120002", text: "USA" },
+            { uuid: "a9dec486-c271-11ec-9d64-0242ac120002", text: "Mexico" },
+          ],
+        },
+      },
+      {
+        id: 2,
+        type: "checkbox",
+        questions: "From witch country are you asdasdasd?",
+        description: null,
+        data: {
+          options: [
+            { uuid: "9663f23c-c271-11ec-9d64-0242ac120002", text: "asdasd" },
+            { uuid: "a9dec486-c271-11ec-9d64-0242ac120002", text: "12312" },
+            { uuid: "9663f23c-c271-11ec-9d64-0242ac120002", text: "qwe" },
+            { uuid: "a9dec486-c271-11ec-9d64-0242ac120002", text: "as" },
+          ],
+        },
+      },
+      {
+        id: 5,
+        type: "text",
+        questions: "From asdasd country are you asdasdasd?",
+        description: null,
+        data: {},
+      },
+      {
+        id: 6,
+        type: "textarea",
+        questions: " asdasd country are you asdasdasd?",
+        description: null,
+        data: {},
+      },
+    ],
+  },
+  {
+    id: 299,
+    title: "teste_title1",
+    slug: "test_sluig1",
+    status: "test_status1",
+    image: "",
+    description: "test_description1",
+    created_at: "test_created_a1",
+    upadated_at: "test_updated_at1",
+    expire_date: "test_expire_date1",
+    questions: [
+      {
+        id: 1,
+        type: "select",
+        questions: "From witch country are you?",
+        description: null,
+        data: {
+          options: [
+            { uuid: "9663f23c-c271-11ec-9d64-0242ac120002", text: "USA" },
+            { uuid: "a9dec486-c271-11ec-9d64-0242ac120002", text: "Mexico" },
+          ],
+        },
+      },
+      {
+        id: 2,
+        type: "checkbox",
+        questions: "From witch country are you asdasdasd?",
+        description: null,
+        data: {
+          options: [
+            { uuid: "9663f23c-c271-11ec-9d64-0242ac120002", text: "asdasd" },
+            { uuid: "a9dec486-c271-11ec-9d64-0242ac120002", text: "12312" },
+            { uuid: "9663f23c-c271-11ec-9d64-0242ac120002", text: "qwe" },
+            { uuid: "a9dec486-c271-11ec-9d64-0242ac120002", text: "as" },
+          ],
+        },
+      },
+      {
+        id: 5,
+        type: "text",
+        questions: "From asdasd country are you asdasdasd?",
+        description: null,
+        data: {},
+      },
+      {
+        id: 6,
+        type: "textarea",
+        questions: " asdasd country are you asdasdasd?",
+        description: null,
+        data: {},
+      },
+    ],
+  },
+];
 
 const store = createStore({
   state: {
@@ -6,25 +116,34 @@ const store = createStore({
       data: {},
       token: sessionStorage.getItem("TOKEN"),
     },
+    surveys: [...tmpSurveys],
   },
+
   getters: {},
+
   actions: {
     register({ commit }, user) {
-      return fetch("http://localhost:8000/api/register", {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify(user),
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          commit("setUser", res);
-          return res;
-        });
+      return axiosClient.post("/register", user).then(({ data }) => {
+        commit("setUser", data);
+        return data;
+      });
+    },
+
+    login({ commit }, user) {
+      return axiosClient.post("/login", user).then(({ data }) => {
+        commit("setUser", data);
+        return data;
+      });
+    },
+
+    logout({ commit }) {
+      return axiosClient.post("/logout").then((response) => {
+        commit("logout");
+        return response;
+      });
     },
   },
+
   mutations: {
     logout: (state) => {
       state.user.data = {};
@@ -36,6 +155,7 @@ const store = createStore({
       sessionStorage.setItem("TOKEN", userData.token);
     },
   },
+
   modules: {},
 });
 
