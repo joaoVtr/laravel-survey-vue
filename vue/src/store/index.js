@@ -7,7 +7,7 @@ const tmpSurveys = [
     title: "teste_title",
     slug: "test_sluig",
     status: "test_status",
-    image: "C:/Users/joao_/OneDrive/Imagens/1.jpeg",
+    image: "",
     description: "test_description",
     created_at: "test_created_at",
     upadated_at: "test_updated_at",
