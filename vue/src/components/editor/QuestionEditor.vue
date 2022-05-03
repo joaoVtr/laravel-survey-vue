@@ -29,7 +29,7 @@
       <!-- Delete question -->
       <button
         type="button"
-        @click="addQuestion()"
+        @click="deleteQuestion()"
         class="flex items-center text-xs py-1 px-3 rounded-sm text-red-500 hover:border-red-600"
       >
         <svg
@@ -137,7 +137,7 @@
       </h4>
 
       <div
-        v-if="!model.data.options.lenght"
+        v-if="!model.data.options.length"
         class="text-xs text-gray-600 text-center py-3"
       >
         You don't have any options defined
@@ -185,6 +185,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
+import { v4 as uuidv4 } from "uuid";
 import store from "../../store";
 
 const props = defineProps({
@@ -244,6 +245,14 @@ function dataChange() {
   }
 
   emit("change", data);
+}
+
+function addQuestion() {
+  emit("addQuestion", props.index + 1);
+}
+
+function deleteQuestion() {
+  emit("deleteQuestion", props.question);
 }
 </script>
 
