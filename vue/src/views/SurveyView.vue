@@ -198,7 +198,7 @@ const router = useRouter();
 let model = ref({
   title: "",
   status: false,
-  decription: null,
+  description: null,
   image: null,
   expire_date: null,
   questions: [],
