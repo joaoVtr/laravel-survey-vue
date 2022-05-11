@@ -3,13 +3,13 @@
 namespace Tests\Feature\Survey;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Illuminate\Support\Facades\DB;
 
 class SurveyTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     public function user()
     {
@@ -20,8 +20,6 @@ class SurveyTest extends TestCase
 
     public function test_create_survey()
     {
-
-        // dd(DB::connection()->getPDO());
 
         $token = $this->user();
 

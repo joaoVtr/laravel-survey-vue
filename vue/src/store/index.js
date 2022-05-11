@@ -124,6 +124,9 @@ const store = createStore({
 
   actions: {
     saveSurvey({ commit }, survey) {
+      //Removendo campo sem uso
+      delete survey.image_url;
+
       let response;
       if (survey.id) {
         response = axiosClient
