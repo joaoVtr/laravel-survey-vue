@@ -3,12 +3,12 @@
     <template v-slot:header>
       <div class="flex items-center justify-between">
         <h1 class="text-3xl font-bold text-gray-900">
-          {{ model.id ? model.title : "Create a Survey" }}
+          {{ route.params.id ? model.title : "Create a Survey" }}
         </h1>
       </div>
     </template>
-
-    <form @submit.prevent="saveSurvey">
+    <div v-if="surveyLoading" class="flex justify-center">Loading...</div>
+    <form v-else @submit.prevent="saveSurvey">
       <div class="shadow sm:rounded-md sm:overflow-hidden">
         <!-- Survey Fields -->
         <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
@@ -186,7 +186,7 @@
 <script setup>
 import { v4 as uuidv4 } from "uuid";
 import store from "../store";
-import { ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import PageComponent from "../components/PageComponent.vue";
@@ -194,23 +194,32 @@ import QuestionEditor from "../components/editor/QuestionEditor.vue";
 
 const route = useRoute();
 const router = useRouter();
+const surveyLoading = computed(() => store.state.currentSurvey.loading);
 
 //Create empty survey
 let model = ref({
   title: "",
   status: false,
   description: null,
-  image: null,
+  image_url: null,
   expire_date: null,
   questions: [],
 });
 
+//verifica se o survey atual muda e quando isso acontece atualizamos o local model
+watch(
+  () => store.state.currentSurvey.data,
+  (newVal, oldVal) => {
+    model.value = {
+      ...JSON.parse(JSON.stringify(newVal)),
+      status: newVal.status !== "draft",
+    };
+  }
+);
+
 //Verifica se a rota contem o parametrop ID para diferenciar a criação da edição
 if (route.params.id) {
-  // Não entendi
-  model.value = store.state.surveys.find(
-    (s) => s.id === parseInt(route.params.id)
-  );
+  store.dispatch("getSurvey", route.params.id);
 }
 
 function onImageChoose(ev) {
