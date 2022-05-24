@@ -13,14 +13,12 @@ class SurveyTest extends TestCase
 
     public function user()
     {
-
         $user = User::factory()->create();
         return $user->createToken('teste')->plainTextToken;
     }
 
     public function test_create_survey()
     {
-
         $token = $this->user();
 
         $headers = ['Authorization' => "Bearer {$token}"];
