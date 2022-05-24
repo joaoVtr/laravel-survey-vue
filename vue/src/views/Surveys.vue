@@ -89,7 +89,9 @@ import store from "../store";
 import { computed } from "vue";
 import PageComponent from "../components/PageComponent.vue";
 
-const surveys = computed(() => store.state.surveys);
+const surveys = computed(() => store.state.surveys.data);
+
+store.dispatch("getSurveys");
 
 function deleteSurvey(survey) {
   if (confirm("Vai deletar mesmo, sério? ")) {
