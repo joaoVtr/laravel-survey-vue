@@ -8,11 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class SurveyQuestion extends Model
 {
     protected $fillable = [
+        'survey_id',
         'question',
         'data',
         'type',
-        'survey_id',
-        'desciption'
+        'description'
     ];
     use HasFactory;
+
+    public function survey()
+    {
+        return $this->belongsTo(Survey::class);
+    }
 }

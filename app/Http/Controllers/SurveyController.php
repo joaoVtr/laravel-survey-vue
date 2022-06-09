@@ -26,7 +26,7 @@ class SurveyController extends Controller
     {
 
         $user = $request->user();
-        return SurveyResource::collection(Survey::where('user_id', $user->id)->paginate());
+        return SurveyResource::collection(Survey::where('user_id', $user->id)->paginate(50));
     }
 
     /**
@@ -161,11 +161,16 @@ class SurveyController extends Controller
         return $relativePath;
     }
 
+    /**
+     * 
+     * @param $data
+     * @return mixed
+     * @throws \Illuminate\Validation\ValidationException
+     */
     private function createQuestion($data)
     {
         if (is_array($data['data'])) {
             $data['data'] = json_encode($data['data']);
-
             $validator = Validator::make($data, [
                 'question' => 'required|string',
                 'type' => ['required', Rule::in([
@@ -177,9 +182,8 @@ class SurveyController extends Controller
                 ])],
                 'description' => 'nullable|string',
                 'data' => 'present',
-                'id' => 'exists:App\Models\Survey,id',
+                'survey_id' => 'exists:App\Models\Survey,id',
             ]);
-
             return SurveyQuestion::create($validator->validated());
         }
     }

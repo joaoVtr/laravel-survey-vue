@@ -1,7 +1,7 @@
 <template>
   <!-- Question index -->
   <div class="flex items-center justify-between">
-    <h3 class="text-lg font-bold">{{ index + 1 }}. {{ model.questions }}</h3>
+    <h3 class="text-lg font-bold">{{ index + 1 }}. {{ model.question }}</h3>
 
     <div class="flex items-center">
       <!-- Add new question -->
@@ -60,7 +60,7 @@
       <input
         type="text"
         :name="'question_text_' + model.data"
-        v-model="model.questions"
+        v-model="model.question"
         @change="dataChange"
         :id="'question_text_' + model.data"
         class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
