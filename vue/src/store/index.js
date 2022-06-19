@@ -10,6 +10,7 @@ const store = createStore({
     },
     surveys: {
       loading: false,
+      links: [],
       data: [],
     },
     currentSurvey: {
@@ -17,6 +18,11 @@ const store = createStore({
       data: {},
     },
     questionsTypes: ["text", "select", "radio", "checkbox", "textarea"],
+    notification: {
+      show: false,
+      type: null,
+      message: null,
+    },
   },
 
   getters: {},
