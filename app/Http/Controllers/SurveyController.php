@@ -16,6 +16,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\Http\Requests\StoreSurveyAnswerRequest;
+use App\Models\SurveyAnswer;
+use App\Models\SurveyQuestionAnswer;
 
 class SurveyController extends Controller
 {
@@ -81,6 +84,35 @@ class SurveyController extends Controller
     public function showForGuest(Survey $survey)
     {
         return new SurveyResource($survey);
+    }
+
+    public function storeAnswer(StoreSurveyAnswerRequest $request, Survey $survey)
+    {
+        $validated = $request->validated();
+        //        var_dump($validated, $survey);
+
+        $surveyAnswer = SurveyAnswer::create([
+            'survey_id' => $survey->id,
+            'start_date' => date('Y-m-d H:i:s'),
+            'end_date' => date('Y-m-d H:i:s'),
+        ]);
+
+        foreach ($validated['answers'] as $questionId => $answer) {
+            $question = SurveyQuestion::where(['id' => $questionId, 'survey_id' => $survey->id])->get();
+            if (!$question) {
+                return response("Invalid question ID: \"$questionId\"", 400);
+            }
+
+            $data = [
+                'survey_question_id' => $questionId,
+                'survey_answer_id' => $surveyAnswer->id,
+                'answer' => is_array($answer) ? json_encode($answer) : $answer
+            ];
+
+            $questionAnswer = SurveyQuestionAnswer::create($data);
+        }
+
+        return response("", 201);
     }
 
     /**
