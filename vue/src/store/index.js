@@ -8,6 +8,10 @@ const store = createStore({
       data: {},
       token: sessionStorage.getItem("TOKEN"),
     },
+    dashboard: {
+      loading: false,
+      data: {},
+    },
     surveys: {
       loading: false,
       links: [],
